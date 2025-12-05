@@ -119,3 +119,7 @@ generated/
 vite.config.ts.timestamp*
 rollup.cache
 parcel-cache/
+
+
+# my ignore
+model.*
