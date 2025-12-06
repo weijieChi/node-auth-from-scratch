@@ -1,4 +1,4 @@
-import type { User } from "../models/user.model"
+import type { User } from "../models/user.model.ts"
 
 export interface IUserRepository {
   createUser(user: Omit<User, "id">): Promise<User>;

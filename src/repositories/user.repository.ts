@@ -1,5 +1,5 @@
-import type { IUserRepository } from "./user.repository.interface";
-import type { User } from "../models/user.model";
+import type { IUserRepository } from "./user.repository.interface.ts";
+import type { User } from "../models/user.model.ts";
 
 export class UserRepository implements IUserRepository {
   private user: User[] = [];
