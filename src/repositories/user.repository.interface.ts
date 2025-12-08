@@ -1,7 +1,7 @@
-import type { User } from "../models/user.model.ts"
+import type { User } from "../generated/prisma/client.js"
 
 export interface IUserRepository {
-  createUser(user: Omit<User, "id">): Promise<User>;
+  createUser(user: User): Promise<User>;
   findByUsername(username: string): Promise<User | null>;
 }
 

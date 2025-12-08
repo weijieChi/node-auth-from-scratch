@@ -91,7 +91,7 @@ jest-html-reporters-*/
 # Note: migrations should be tracked in Git
 ############################################
 # Prisma Client (自動產生，不需要版控)
-src/prisma/generated/
+src/generated/prisma
 generated/
 
 # Prisma Schema 需要版控，不加入 gitignore：
@@ -123,3 +123,4 @@ parcel-cache/
 
 # my ignore
 model.*
+/src/generated/prisma
