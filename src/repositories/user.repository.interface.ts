@@ -1,7 +1,8 @@
-import type { User } from "../generated/prisma/client.js"
+import type { User } from "../generated/prisma/client.js";
+import type { RegisterDTO } from "../types/user.js";
 
 export interface IUserRepository {
-  createUser(user: User): Promise<User>;
+  createUser(user: RegisterDTO): Promise<User>;
   findByUsername(username: string): Promise<User | null>;
 }
 

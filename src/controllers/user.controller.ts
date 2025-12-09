@@ -1,11 +1,13 @@
 import { UserService } from "../services/user.services.js";
 import type { Request, Response } from "express";
+import type { RegisterDTO, LoginDTO } from "../types/user.js"
 
 export class UserController {
   constructor(private userServices: UserService) {}
 
-  register = async (req: Request, res: Response) => {
+  register = async (req: Request<unknown, unknown, RegisterDTO>, res: Response) => {
     try {
+      // const { name, email, password } = req.body;
       const user = await this.userServices.register(req.body);
       res.json({ message: "Registered", user });
     } catch (err: unknown) {
@@ -14,7 +16,7 @@ export class UserController {
     }
   };
 
-  login = async (req: Request, res: Response) => {
+  login = async (req: Request<unknown, unknown, LoginDTO>, res: Response) => {
     try {
       const user = await this.userServices.login(req.body);
       res.json({ message: "Login success!", user });
