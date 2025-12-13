@@ -20,7 +20,8 @@ export const generalErrorHandler = (
     ip: req.ip,
     body: req.body,
     query: req.query,
-   ge : String(err),
+    params: req.params,
+    error: err instanceof Error ? err.message: String(err),
     stack: err instanceof Error ? err.stack : undefined,
   });
 

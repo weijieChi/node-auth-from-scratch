@@ -7,6 +7,7 @@ export const dailyRotateTransport = new DailyRotateFile({
   datePattern: "YYYY-MM--DD",
   zippedArchive: false,
   maxFiles: "30d", // 保留 30 天
+  maxSize: "20m",  // 單檔最大 20MB
   level: "info",
   format: format.combine(format.timestamp(), format.json()),
 });
