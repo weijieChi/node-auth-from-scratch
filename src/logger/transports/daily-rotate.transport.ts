@@ -1,5 +1,5 @@
 import DailyRotateFile from "winston-daily-rotate-file";
-import { format } from "winston";
+import { logFormat } from "./formats.js";
 
 export const dailyRotateTransport = new DailyRotateFile({
   dirname: "logs",
@@ -9,5 +9,5 @@ export const dailyRotateTransport = new DailyRotateFile({
   maxFiles: "30d", // 保留 30 天
   maxSize: "20m",  // 單檔最大 20MB
   level: "info",
-  format: format.combine(format.timestamp(), format.json()),
+  format: logFormat,
 });
