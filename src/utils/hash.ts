@@ -1,4 +1,4 @@
-import bcrypt, { compare } from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 export class HashHelper {
   static async hashPassword(password: string): Promise<string> {

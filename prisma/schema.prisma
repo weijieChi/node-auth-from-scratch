@@ -18,8 +18,66 @@ model User {
   id         Int     @id @default(autoincrement())
   name       String  @unique
   email      String  @unique
-  password   String
+  password   String?     // null for oAuth
   createdAt  DateTime @default(now())
-  updateAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
+
+  sessions   Session[]
+  jwtTokens  JwtToken[]
+  oauths     OAuthAccount[]
   @@map("users")
+}
+
+model Session {
+  id        String   @id @default(uuid(7))
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model JwtToken {
+  id        String   @id @default(uuid(7))
+  jti       String   @unique   // JWT ID（uuid v7）
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type      JwtType
+  revoked   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+  @@index([jti])
+  @@map("jwt_tokens")
+}
+
+enum JwtType {
+  ACCESS
+  REFRESH
+}
+
+model OAuthAccount {
+  id           String   @id @default(uuid(7))
+  provider     OAuthProvider
+  providerUserId String
+
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt    DateTime @default(now())
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+enum OAuthProvider {
+  GOOGLE
+  FACEBOOK
 }

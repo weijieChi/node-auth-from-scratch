@@ -12,7 +12,7 @@ import http from "http";
 import { app } from "./app.js";
 import { logger } from "./logger/index.js"; // 在 server.ts 啟動 Log
 // HTTP server instance（為了之後能 close）
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 let server: http.Server;
 
 /**
