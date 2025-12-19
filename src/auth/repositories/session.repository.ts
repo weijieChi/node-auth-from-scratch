@@ -1,4 +1,5 @@
 import type { PrismaClient, Session } from "../../generated/prisma/client.js";
+import type { SessionWithUser } from "../../types/user.js"
 
 export class SessionRepository {
   constructor(private prisma: PrismaClient) {}
@@ -39,6 +40,28 @@ export class SessionRepository {
         expiresAt: { gt: now },
       },
     });
+  }
+
+   /**
+   * 依 sessionId 查詢 session，並關聯 user
+   */
+  async findSessionWithUser(
+    sessionId: string
+  ): Promise<SessionWithUser | null> {
+    return this.prisma.session.findUnique({
+      where: { id: sessionId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            createdAt: true,
+            updateAt: true,
+          }
+        }
+      }
+    })
   }
 
   /**

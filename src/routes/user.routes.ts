@@ -4,9 +4,18 @@ import { asyncHandler } from "../utils/async--handler.js";
 import { notFoundHandler } from "../middleware/not-found.js";
 import { validate } from "../middleware/validate.js";
 import { RegisterSchema } from "../types/auth.js";
+import type { Request, Response, NextFunction } from "express";
+
+import { ensureAuth } from "../auth/middleware/ensure-auth.js";
 
 const router = Router();
 const userController = container.userController;
+
+router.get("/profile", ensureAuth, (req: Request, res: Response, _next: NextFunction) => {
+  res.json({
+    ...req.user
+  })
+})
 
 router.post("/register",
   validate(RegisterSchema),

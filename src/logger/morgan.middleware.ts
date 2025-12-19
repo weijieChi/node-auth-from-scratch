@@ -13,6 +13,7 @@ morgan.format("http-json", (tokens, req, res) => {
     method: tokens.method?.(req, res) ?? "-", // ?. ??
     url: tokens.url?.(req, res) ?? "-",
     status: Number(tokens.status?.(req, res) ?? 0),
+    session: tokens.session?.(req, res) ?? "-",
     contentLength: tokens.res?.(req, res, 'content-length') ?? "-",
     responseTimeMs: Number(tokens["response-time"]?.(req, res) ?? 0),
   });

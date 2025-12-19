@@ -1,5 +1,6 @@
-import type { Session } from "../../generated/prisma/client.js";
 import { SessionRepository } from "../repositories/session.repository.js";
+import type { Session } from "../../generated/prisma/client.js";
+import type { SessionWithUser } from "../../types/user.js";
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 天
 const EXTEND_THRESHOLD_MS = 1000 * 60 * 60 * 24; // 剩 1 天才延
@@ -21,7 +22,51 @@ export class SessionService {
    * - 有效 → 回傳 session
    */
   async validateSession(sessionId: string): Promise<Session | null> {
-    return this.repo.findValid(sessionId);
+    /**
+     * 取得有效 session
+     * - 不存在 / 過期 → null
+     * - 有效 → session
+     */
+    const session = await this.repo.findValid(sessionId);
+    if (!session) {
+      return null;
+    }
+
+    if (session.expiresAt <= new Date()) {
+      return null;
+    }
+    return session;
+  }
+
+  async findSessionWithUser(
+    sessionId: string
+  ): Promise<SessionWithUser | null> {
+    const session = await this.repo.findSessionWithUser(sessionId);
+    if (!session) return null;
+    return session;
+  }
+
+  // 同時驗證 cookies sid 的 session 是否存在，跟是否過期，並回傳結果跟關聯資料
+//   (method) SessionService.getValidSessionWithUser(sessionId: string): Promise<({
+//     user: {
+//         name: string;
+//         email: string;
+//         id: number;
+//         createdAt: Date;
+//         updateAt: Date;
+//     };
+// } & {
+//     id: string;
+//     createdAt: Date;
+//     userId: number;
+//     expiresAt: Date;
+// }) | null>
+  async getValidSessionWithUser(sessionId: string) {
+    const session = await this.repo.findSessionWithUser(sessionId);
+    if (!session) return null;
+    if (session.expiresAt <= new Date()) return null;
+    this.repo.extend(session.id, session.expiresAt)
+    return session;
   }
 
   /**

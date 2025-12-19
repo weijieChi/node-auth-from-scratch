@@ -1,4 +1,15 @@
-import type { User as PrismaUser } from "../generated/prisma/client.js";
+import type { Prisma} from "../generated/prisma/client.js";
+
+export type SafeUser = Prisma.UserGetPayload<{
+  select: {
+    id: true;
+    name: true;
+    email: true;
+    createdAt: true;
+    updateAt: true;
+  };
+}>;
+
 
 declare global {
   namespace Express {
@@ -6,6 +17,7 @@ declare global {
     // 這是 TypeScript 官方建議的 declaration merging 用法
     // ESLint 在這裡是「誤判」
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-    interface User extends PrismaUser {}
+    interface User extends SafeUser {}
+    // interface User extends PrismaUser {}
   }
 }

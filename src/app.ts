@@ -5,10 +5,13 @@ import { generalErrorHandler } from "./middleware/error-handler.js";
 import { httpLogger } from "./logger/morgan.middleware.js";
 import { initLocalStrategy } from "./auth/strategies/local.strategy.init.js";
 import passport from "passport";
+import cookieParser from "cookie-parser";
+
 
 export const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 app.use(httpLogger); // httpLogger
 app.use(passport.initialize());
 initLocalStrategy();
