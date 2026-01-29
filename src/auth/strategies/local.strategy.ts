@@ -28,7 +28,7 @@ export function createLocalStrategy(userRepo: UserRepository): LocalStrategy {
   const verify: VerifyFunction = async (
     email: string,
     password: string,
-    done
+    done,
   ) => {
     try {
       // 1️⃣ 查使用者
@@ -62,6 +62,6 @@ export function createLocalStrategy(userRepo: UserRepository): LocalStrategy {
       passwordField: "password",
       session: true, // 表示「允許使用 session」（是否真的用由你決定）
     },
-    verify
+    verify,
   );
 }

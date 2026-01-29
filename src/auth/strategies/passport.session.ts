@@ -1,6 +1,5 @@
 import passport from "passport";
 import { prisma } from "../../libs/prisma.js";
-import { logger } from "../../logger/winston.logger.js";
 
 /**
  * serializeUser
@@ -14,9 +13,7 @@ import { logger } from "../../logger/winston.logger.js";
 // 這是 adapter 邊界，使用斷言是合理做法。
 passport.serializeUser((user: Express.User, done) => {
   const u = user as { id?: number; securityStamp?: string };
-  logger.info("passport.session.ts", {
-    user: user
-  })
+
   if (!u.id || !u.securityStamp) {
     return done(new Error("Invalid user for session serialization"));
   }
@@ -60,8 +57,6 @@ passport.deserializeUser(
       if (user.securityStamp !== payload.securityStamp) {
         return done(null, false);
       }
-
-      // const { securityStamp: _securityStamp, ...safeUser } = user;
 
       return done(null, user);
     } catch (err) {

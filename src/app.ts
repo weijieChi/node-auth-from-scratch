@@ -12,7 +12,7 @@ import userRoutes from "./routes/user.routes.js";
 import authRouter from "./auth/routes/auth.routes.js";
 
 // ✅ 1️⃣ 只要 import，就會執行 serialize / deserialize
-import "./auth/strategies/strategies.index.js"
+import "./auth/strategies/strategies.index.js";
 
 export const app = express();
 app.use(express.json());
@@ -22,7 +22,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const PgSessionStore = pgSession(session);
-
 
 // 型別乾淨
 // 未來如果開更嚴格的 TS 不會爆
@@ -53,14 +52,13 @@ app.use(
     },
 
     rolling: true, // 🔑 對應 sliding expiration（cookie 層）
-  })
-)
+  }),
+);
 
 /* ---------------- passport ---------------- */
 
 app.use(passport.initialize()); // passport initialize
 app.use(passport.session()); // passport session（serialize / deserialize）
-
 
 /* ---------------- routes ---------------- */
 app.use(httpLogger); // httpLogger

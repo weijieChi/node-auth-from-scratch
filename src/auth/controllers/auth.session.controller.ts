@@ -14,28 +14,21 @@ type LoginUser = Express.User & { securityStamp: string };
 export async function login(req: Request, res: Response, next: NextFunction) {
   passport.authenticate("local", (err: unknown, user: LoginUser | false) => {
     if (err) return next(err);
-    // logger.info("auth.session.controller.ts user", { user });
+    logger.error("authenticate failed", { err });
     if (!user) return next(new AppError("Invalid credentials", 401));
 
     // 🔑 關鍵：交給 passport + express-session
-
-
     req.logIn(user, async (err) => {
-      if (err) return next(err);
+      if (err) {
+        logger.error("req.logIn failed", { err });
+        return next(err);
+      }
       req.session.save(async (err) => {
-        if(err) return next(err)
+        if (err) return next(err);
         // ⭐ 關鍵新增
         const sid = req.sessionID;
         await syncExpressSession(sid, user.id, user.securityStamp);
-
-      })
-
-
-      logger.error("req.login Error (Serialization failed)", {
-        error: "loginErr",
-        body: req.body,
       });
-      // logger.info("auth.session.controller.ts req.logIn user", { user });
       return res.status(200).json({
         user: {
           id: user.id,
