@@ -60,9 +60,10 @@ model ExpressSession {
 
 model JwtToken {
   id        String   @id @default(uuid(7))
-  jti       String   @unique   // JWT ID（uuid v7）
+  jti       String   @unique @default(uuid())  // JWT ID（uuid v7）
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  securityStamp String @default(uuid())   // 發 token 當下的 user.securityStamp
 
   type      JwtType
   revoked   Boolean  @default(false)
@@ -72,6 +73,7 @@ model JwtToken {
 
   @@index([userId])
   @@index([jti])
+  @@index([securityStamp])
   @@map("jwt_tokens")
 }
 
