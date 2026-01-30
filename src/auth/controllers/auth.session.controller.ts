@@ -14,7 +14,7 @@ type LoginUser = Express.User & { securityStamp: string };
 export async function login(req: Request, res: Response, next: NextFunction) {
   passport.authenticate("local", (err: unknown, user: LoginUser | false) => {
     if (err) return next(err);
-    logger.error("authenticate failed", { err });
+    logger.error("auth.session.controller.ts login function failed", { err });
     if (!user) return next(new AppError("Invalid credentials", 401));
 
     // 🔑 關鍵：交給 passport + express-session

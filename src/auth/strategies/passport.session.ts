@@ -1,6 +1,11 @@
 import passport from "passport";
 import { prisma } from "../../libs/prisma.js";
 
+type SessionPayload = {
+  userId: number;
+  securityStamp: string;
+};
+
 /**
  * serializeUser
  *
@@ -12,13 +17,10 @@ import { prisma } from "../../libs/prisma.js";
 // Passport 的型別預設把 user 當 Express.User（SafeUser），但登入當下 strategy 可能給的是 prisma user。
 // 這是 adapter 邊界，使用斷言是合理做法。
 passport.serializeUser((user: Express.User, done) => {
-  const u = user as { id?: number; securityStamp?: string };
-
-  if (!u.id || !u.securityStamp) {
-    return done(new Error("Invalid user for session serialization"));
+  if(!user) {
+    return done( new Error("Invalid user data"));
   }
-
-  return done(null, user.id);
+  return done(null, { userId: user.id, securityStamp: user.securityStamp });
 });
 
 /**
@@ -28,39 +30,38 @@ passport.serializeUser((user: Express.User, done) => {
  * - 這個 session 是否仍然有效
  * - 是否還能信任這個 user
  */
-passport.deserializeUser(
-  async (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    payload: any,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    done: (err: any, user?: Express.User | false) => void,
-  ) => {
-    try {
-      const user = await prisma.user.findUnique({
-        where: { id: payload.userId },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          securityStamp: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      });
-
-      // 使用者不存在 → session 失效
-      if (!user) {
-        return done(null, false);
-      }
-
-      // securityStamp 不一致 → 強制登出（session invalid）
-      if (user.securityStamp !== payload.securityStamp) {
-        return done(null, false);
-      }
-
-      return done(null, user);
-    } catch (err) {
-      return done(err);
+passport.deserializeUser(async (payload: SessionPayload, done) => {
+  try {
+    if (
+      !payload ||
+      typeof payload !== "object" ||
+      typeof payload.userId !== "number" ||
+      typeof payload.securityStamp !== "string"
+    ) {
+      return done(null, false);
     }
-  },
-);
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        securityStamp: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!user) {
+      return done(null, false);
+    }
+    if (user.securityStamp !== payload.securityStamp) {
+      return done(null, false);
+    }
+
+    return done(null, user);
+  } catch (err) {
+    return done(err);
+  }
+});

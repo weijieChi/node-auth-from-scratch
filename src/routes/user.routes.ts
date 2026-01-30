@@ -6,12 +6,13 @@ import { validate } from "../middleware/validate.js";
 import { RegisterSchema } from "../types/auth.js";
 import type { Request, Response, NextFunction } from "express";
 
-import { ensureAuth } from "../auth/middleware/ensure-auth.js";
+// import { ensureAuth } from "../auth/middleware/ensure-auth.js";
+import { ensureSessionAuth } from "../auth/middleware/ensure-session-auth.js";
 
 const router = Router();
 const userController = container.userController;
 
-router.get("/profile", ensureAuth, (req: Request, res: Response, _next: NextFunction) => {
+router.get("/profile", ensureSessionAuth, (req: Request, res: Response, _next: NextFunction) => {
   res.json({
     ...req.user
   })
