@@ -15,7 +15,7 @@ export const RefreshTokenPayloadSchema = z.object({
   sub: z.number(), // user id
   jti: z.uuidv7(), // token id (uuid v7)
   type: z.literal("REFRESH"),
-  securityStamp: z.string(), // snapshot of user.securityStamp
+  securityStamp: z.uuid(), // snapshot of user.securityStamp
   iat: z.number(), // issued at (UNIX timestamp)
   exp: z.number(), // expires at (UNIX timestamp)
 });
