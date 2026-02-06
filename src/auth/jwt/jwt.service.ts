@@ -2,6 +2,11 @@
 // 簽 token
 // 驗 token
 
+/**
+ * Issue access & refresh tokens.
+ * All login flows (password / OAuth) must go through this method.
+ */
+
 import jwt from "jsonwebtoken";
 import { v7 as uuidv7 } from "uuid";
 // import { logger } from "../../logger/winston.logger.js";

@@ -1,3 +1,9 @@
+/**
+ * @deprecated
+ * Legacy implementation kept for reference only.
+ * Not used by current routing.
+ */
+
 import passport from "passport";
 import { container } from "../../di/container.js";
 import { AppError } from "../../errors/app-error.js";

@@ -30,9 +30,9 @@ export class GoogleOAuthController {
     try {
       const code = req.query.code;
       if (typeof code !== "string") {
-        
+
         // OAuth callback 不完整
-        logger.error("google-oauth-controller, Missing authorization code", {
+        logger.error("google-oauth-controller: callback error, Missing authorization code", {
           reqQuery: req.query,
         });
         res.redirect("/oauth/google-oauth-test-error.html");
@@ -47,7 +47,7 @@ export class GoogleOAuthController {
       // res.json(result);
     } catch (err) {
       // next(err);
-      logger.error("google-oauth-controller err", { err: err });
+      logger.error("google-oauth-controller: missing authorization code", { err: err });
       res.redirect("/oauth/google-oauth-test-error.html");
     }
   };

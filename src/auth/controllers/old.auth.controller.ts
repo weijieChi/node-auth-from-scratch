@@ -1,3 +1,9 @@
+/**
+ * @deprecated
+ * Legacy implementation kept for reference only.
+ * Not used by current routing.
+ */
+
 import type { Request, Response, NextFunction } from "express";
 import { LoginSchema } from "../../types/auth.js";
 import { AppError } from "../../errors/app-error.js";
