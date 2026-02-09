@@ -8,7 +8,7 @@ export type SessionWithUser = Prisma.SessionGetPayload<{
         name: true;
         email: true;
         createdAt: true;
-        updateAt: true;
+        updatedAt: true;
       };
     };
   };

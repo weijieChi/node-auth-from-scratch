@@ -10,9 +10,9 @@ export class UserService {
   constructor(private userRepository: IUserRepository) {}
 
   async register(data: RegisterDTO): Promise<User> {
-    const userExists = await this.userRepository.findByUsername(data.name);
+    // const userExists = await this.userRepository.findByUsername(data.name);
     const emailExist = await this.userRepository.findByEmail(data.email);
-    if (userExists) throw new AppError("Username already exists!", 409);
+    // if (userExists) throw new AppError("Username already exists!", 409);
     if (emailExist) throw new AppError("Email already exists!", 409);
 
     const hashed = await HashHelper.hashPassword(data.password);
@@ -24,9 +24,15 @@ export class UserService {
   }
 
   async login(data: LoginDTO): Promise<User> {
+    if(!data) {
+      throw new AppError("user.services.ts login data not found")
+    }
     const user = await this.userRepository.findByEmail(data.email);
     if (!user) throw new AppError("User not found!", 404);
-
+    
+    if (!user.password) {
+      throw new AppError("user.services.ts login user.password not found")
+    }
     const match = await HashHelper.compare(data.password, user.password);
     if (!match) throw new AppError("Invalid password!", 401);
 

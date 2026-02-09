@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * @deprecated
  * Legacy implementation kept for reference only.
