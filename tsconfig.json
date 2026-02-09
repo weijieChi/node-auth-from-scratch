@@ -50,5 +50,7 @@
     "node_modules",
     "dist",
     "src/auth/routes/old.auth.routes.ts",
+    "src/auth/controllers/old.auth.controller.ts",
+    "src/auth/controllers/old.auth.controller.ts",
   ]
 }

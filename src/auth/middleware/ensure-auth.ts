@@ -14,11 +14,12 @@ export async function ensureAuth(
   // Session fallback
   const jwtAuthMiddleware = jwtAuth(container.jwtService);
 
+
   const authHeader = req.headers.authorization;
 
   // 1️⃣ 有 Bearer token → JWT
   if (authHeader?.startsWith("Bearer")) {
-    return jwtAuthMiddleware;
+    return jwtAuthMiddleware(req, res, next);
   }
 
   // 2️⃣ 沒有 Bearer → session

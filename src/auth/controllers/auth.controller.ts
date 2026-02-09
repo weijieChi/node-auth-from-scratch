@@ -90,10 +90,10 @@ export class AuthController {
         if (!refreshToken) {
           throw new AppError("Refresh token required", 400);
         }
-        const authHeader = req.headers.authorization;
-        if (authHeader?.startsWith("Bearer ")) {
-          throw new AppError("authHeader required jwt type")
-        }
+        // const authHeader = req.headers.authorization;
+        // if (authHeader?.startsWith("Bearer ")) {
+        //   throw new AppError("authHeader required jwt type")
+        // }
 
         await this.jwtLogoutService.logout(refreshToken);
         return res.status(204).end();

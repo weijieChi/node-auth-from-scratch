@@ -6,24 +6,40 @@ import { validate } from "../middleware/validate.js";
 import { RegisterSchema } from "../types/auth.js";
 import type { Request, Response, NextFunction } from "express";
 
-// import { ensureAuth } from "../auth/middleware/ensure-auth.js";
-import { ensureSessionAuth } from "../auth/middleware/ensure-session-auth.js";
+import { ensureAuth } from "../auth/middleware/ensure-auth.js";
 
 const router = Router();
 const userController = container.userController;
 
-router.get("/profile", ensureSessionAuth, (req: Request, res: Response, _next: NextFunction) => {
-  res.json({
-    ...req.user
-  })
-})
+/**
+ * GET /user/profile
+ * 需要登入
+ */
+router.get(
+  "/profile",
+  ensureAuth,
+  async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.user?.id) {
+      next(new Error("Unauthenticated user"));
+    }
+    const id = Number(req.user?.id);
+    if (Number.isNaN(id)) {
+      next(new Error("Invalid user id"));
+    }
 
-router.post("/register",
+    const user = await container.userRepository.findById(id);
+    if (!user) {
+      next(new Error("user not found"));
+    }
+    res.json(user);
+  },
+);
+
+router.post(
+  "/register",
   validate(RegisterSchema),
-  asyncHandler(userController.register));
-// router.post("/login",
-//   validate(LoginSchema),
-//   asyncHandler(userController.login));
+  asyncHandler(userController.register),
+);
 
 // 路由最後掛錯誤處理
 
