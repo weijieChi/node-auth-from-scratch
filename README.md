@@ -237,3 +237,8 @@ GET `/user/profile/`
 在最後要將 Passport-local 的 session 認證寫入資料庫的階段，還需要使用其他套件對 express-session 資料做處理才能寫入資料庫。
 
 就使用經驗而言， Passport 在 DI 架構整合的過程中，Passport 需要透過 app-level side effects 註冊 Strategy，並對 request 物件進行型別擴充，增加了重構與維護成本。
+
+# 最後心得
+透過本專案實作 Clean Architecture 與 Dependency Injection 架構後，更加體會到專案前期規劃的重要性。
+Dependency Injection 本身僅負責元件之間的組裝方式，並不會自動定義業務邏輯的邊界。若系統在初期未清楚界定核心業務與主要 Use Cases，即使採用 DI 架構，仍可能在實作過程中出現 service 或 controller 的責任模糊，甚至被不同業務共用的情況。
+本次專案的實作經驗讓我理解到，前期規劃的核心價值不在於預先定義所有細節，而是在於先建立清楚的業務邊界與演化方向，使架構能隨著功能增加而持續調整，而非在後期被迫重構。
