@@ -8,6 +8,7 @@ This is a backend-only Node.js practice project built with TypeScript and a Depe
 # 概述
 
 該專案是 **純後端練習專案** ，主要是我在嘗試整合多種後端技術跟設計模式的結果。
+因為該專案是概念驗證練習專案，所以在 API 部分並未處理 CORS 跨網域資源共享。
 這是我想嘗試在 Node.js 使用 Typescript 開發，並嘗試使用不同於之前專案 MVC 架構，使用 **DI (Dependency Injection)** ， 來組織專案模組之間的依賴關係，以降低耦合度，並提升未來擴充與修改的彈性。相較於過往 MVC 專案，本專案著重於：
 
 - 明確的模組邊界
