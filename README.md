@@ -73,7 +73,7 @@ OAuth 驗證成功後，不直接使用 Google 所簽發的 access token， 而�
 1. 從 github 使用 ssh 下載並進入專案資料夾，並安裝所需套件
 
 ```sh
-git@github.com:weijieChi/node-auth-from-scratch.git
+git clone git@github.com:weijieChi/node-auth-from-scratch.git
 cd ./node-auth-from-scratch
 npm install
 ```
